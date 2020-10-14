@@ -6,48 +6,37 @@ using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
 using System.Globalization;
 using System.Drawing;
-
+using System.Collections;
 
 namespace Wochenbericht
 {
     public partial class Form1 : Form
     {
-        GetFiles get = new GetFiles();
-        AutoColpletClass autoColplet = new AutoColpletClass();
+
+       private string filePath = Path.Combine(Application.StartupPath, "muster.docx"); //word file embedded resource C#, to use as muster for find and replace
+        GetFiles get = new GetFiles(); 
+        AutoColpletClass autoColplet = new AutoColpletClass(); // Fill the textboxes automatically
         public Form1()
         {
             InitializeComponent();
             autoColplet.TextAutoComplet(department,nameBox);
-
         }
 
         /// <summary>
         /// Find and Replace Method
+        /// Daten that are marked in the "word.muster" are exchanged with the data in the text boxes.
         /// </summary>
         private void FindAndReplace(Word.Application wordApp, object ToFindText, object replaceWithText)
         {
-            object matchCase = true;
-            object matchWholeWord = true;
-            object matchWildCards = false;
-            object matchSoundLike = false;
-            object nmatchAllforms = false;
-            object forward = true;
-            object format = false;
-            object matchKashida = false;
-            object matchDiactitics = false;
-            object matchAlefHamza = false;
-            object matchControl = false;
+     
 
             object replace = 2;
             object wrap = 1;
-            wordApp.Selection.Find.Execute(ref ToFindText,
-                ref matchCase, ref matchWholeWord,
-                ref matchWildCards, ref matchSoundLike,
-                ref nmatchAllforms, ref forward,
-                ref wrap, ref format, ref replaceWithText,
-                ref replace, ref matchKashida,
-                ref matchDiactitics, ref matchAlefHamza,
-                ref matchControl);
+            wordApp.Selection.Find.Execute( ToFindText,
+              
+                 Wrap : wrap, ReplaceWith: replaceWithText,
+                 Replace :replace 
+                );
         }
         //Creeate the Doc Method
         private void CreateWordDocument(object filename, object SaveAs)
@@ -105,12 +94,11 @@ namespace Wochenbericht
         }
 
         private void FileCreat(object sender, EventArgs e)
-        { 
-
-                CreateWordDocument(@"C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\Muster.docx", get.GetPath()+"\\" + nameDokument.Text + ".docx");
-
-           
+        {
+            
+          CreateWordDocument(filePath, get.GetPath()+"\\" + nameDokument.Text + ".docx"); //filePath ist the path of the muster file, get.GetPath() ist path to save the new Dokoment with the the name in nameDokument.Text 
         }
+        
 		private void TextBoxClear(object sender, EventArgs e)
 		{
 			for (int i = 0; i < this.Controls.Count; i++)
@@ -123,49 +111,53 @@ namespace Wochenbericht
 		}
 		private void Form1_Load(object sender, EventArgs e)
         {
-            get.getAllFiles(filesList, nachweisNummer,nameDokument);
-            DateTime dtBegin = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(-7);
+            get.getAllFiles(filesList, nachweisNummer); // at the start of the app, the data is displayed in the filesList and in the nachweisNummer-Textbox.
+            nameDokument.Text = nachweisNummer.Text; // als Vorschlag wird die nächste Nachweisnummer angezeigt.
+            DateTime dtBegin = DateTime.Now.StartOfWeek(DayOfWeek.Monday).AddDays(-7); // Als Vorschlag wird das Datum auf das Datum von dem ersten Arbeitstag der lezten Woche eingesetzt.
 			vonWoche.Value = dtBegin;
-            DateTime dtEnd = DateTime.Now.EndOfWeek(DayOfWeek.Friday).AddDays(-7);
+            DateTime dtEnd = DateTime.Now.EndOfWeek(DayOfWeek.Friday).AddDays(-7);// Als Vorschlag wird das Datum auf das Datum von dem letzten Arbeitstag der lezten Woche eingesetzt.
             bisWoche.Value = dtEnd;
 
+
         }
+        /// <summary>
+        ///open SelectedFiles
+        /// </summary>
+   
         private void filesList_MouseClick(object sender, MouseEventArgs e)
         {
+
+           
             String adress = get.GetPath() + "\\";
             int index = filesList.FocusedItem.Index;
-            try
-            {
+          
                 for (int i = 0; i <= filesList.Items.Count; i++)
                 {
                     if (index == i)
                     {
                         i++;
-                        System.Diagnostics.Process.Start(adress + i.ToString() + ".docx");
+					try
+					{
+						System.Diagnostics.Process.Start(adress + i.ToString() + ".odt");
+					}
 
-                        break;
+					catch { }
+					try
+					{
+						System.Diagnostics.Process.Start(adress + i.ToString() + ".docx");
+					}
+					catch{ }
+
+
+					break;
                     }
-                }
-            }
-            catch { }
-            try
-            {
-                for (int i = 0; i <= filesList.Items.Count; i++)
-                {
-                    if (index == i)
-
-                    {
-                        i++;
-                        
-                        System.Diagnostics.Process.Start(adress+i.ToString() + ".odt");
-
-                        break;
-                    }
-                }
-            }
-            catch { }
-             
+         }
+           
         }
+        /// <summary>
+        /// open the folder of all files
+        /// </summary>
+     
         private void OpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             String adress = get.GetPath();
@@ -176,29 +168,30 @@ namespace Wochenbericht
         {
             Close();
         }
-
+        /// <summary>
+        /// refrech the filelist
+        /// </summary>
         private void btnRefrech_Click(object sender, EventArgs e)
         {
             filesList.Items.Clear();
             Form1_Load(sender, e);
         }
-
+        /// <summary>
+        /// to select the path of Word-files
+        /// </summary>
 		private void openFilesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
             
-          MessageBox.Show("Achtung, wählen Sie einen Ordner aus, in der mindistes eine File vorhanden ist.");
+          //MessageBox.Show("Wählen Sie bitte einen Ordner aus, in dem mindestens eine Datei vorhanden ist.");
             
             OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-
+           
+            
             if (choofdlog.ShowDialog() == DialogResult.OK)
             {
                 string sFileName = choofdlog.FileName;
                 get.SetPath(sFileName);
             }
-
         }
-    }
+	}
     }

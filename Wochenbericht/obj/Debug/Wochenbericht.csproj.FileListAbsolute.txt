@@ -26,3 +26,4 @@ C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\bin\Debug\System.Thr
 C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\bin\Debug\System.ValueTuple.xml
 C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\bin\Debug\GemBox.Document.dll
 C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\bin\Debug\GemBox.Document.xml
+C:\Users\oalshmali\source\repos\Wochenbericht\Wochenbericht\bin\Debug\Tulpep.NotificationWindow.dll
