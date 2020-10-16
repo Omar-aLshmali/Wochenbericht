@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.FileCreating = new System.Windows.Forms.Button();
 			this.nameBox = new System.Windows.Forms.TextBox();
 			this.yearBox = new System.Windows.Forms.TextBox();
@@ -294,6 +295,7 @@
 			this.filesList.TabIndex = 26;
 			this.filesList.UseCompatibleStateImageBehavior = false;
 			this.filesList.View = System.Windows.Forms.View.List;
+		
 			this.filesList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.filesList_MouseClick);
 			// 
 			// aaaaaaa
@@ -402,6 +404,7 @@
 			this.Controls.Add(this.betrieblich);
 			this.Controls.Add(this.menuStrip1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Margin = new System.Windows.Forms.Padding(5);
 			this.Name = "Form1";

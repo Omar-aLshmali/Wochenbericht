@@ -48,11 +48,8 @@ namespace Wochenbericht
                         if (filesList.Items[j].Text.Equals("Wochenbericht fehlt!"))
                         { filesList.Items[j].ForeColor = Color.Red; }
                     }
-                    PopupNotifier popup = new PopupNotifier();
-                    popup.Image = Properties.Resources.i;
-                    popup.TitleText = "Achtung";
-                    popup.ContentText = "Wochenbericht fehlt!";
-                    popup.Popup();
+                   
+                    PopupAlarm();
                 }
                 if (now.Day.Equals(Convert.ToInt32(jsonObj["Infos"][0]["DayInfo"])) && filesList.Items.Count == Convert.ToInt32(jsonObj["Infos"][0]["Anzahl"]) && DayWeek() == Convert.ToInt32(jsonObj["Infos"][0]["Woche"]))// A new weekly report must be requested at the beginning of each week.
                 {
@@ -67,14 +64,18 @@ namespace Wochenbericht
 			catch { }
         }
 
-
-
-
-
-        /// <summary>
-        /// This is a method that returns the number of the week.
-        /// </summary>
-        public int DayWeek()
+		private void PopupAlarm()
+		{
+            PopupNotifier popup = new PopupNotifier();
+            popup.Image = Properties.Resources.be;
+            popup.TitleText = "Achtung";
+            popup.ContentText = "Wochenbericht fehlt!";
+            popup.Popup();
+        }
+		/// <summary>
+		/// This is a method that returns the number of the week.
+		/// </summary>
+		public int DayWeek()
         {
             CultureInfo myCI = new CultureInfo("DE");
             Calendar myCal = myCI.Calendar;

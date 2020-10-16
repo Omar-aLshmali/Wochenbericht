@@ -103,7 +103,7 @@ namespace Wochenbericht
 		{
 			for (int i = 0; i < this.Controls.Count; i++)
 			{
-				if (this.Controls[i] is TextBox)
+				if (Controls[i] is TextBox)
 				{
 					((TextBox)this.Controls[i]).Clear();
 				}
@@ -193,5 +193,7 @@ namespace Wochenbericht
                 get.SetPath(sFileName);
             }
         }
+
+
 	}
     }
